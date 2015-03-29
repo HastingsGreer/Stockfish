@@ -479,7 +479,7 @@ namespace {
         Tracing::write(KING, Us, score);
 
     {
-      int rank_bonus = rank_of(ksq) * 100;
+      int rank_bonus = relative_rank(Us, ksq) * 1000;
       score += make_score(rank_bonus, rank_bonus);
     }
 
