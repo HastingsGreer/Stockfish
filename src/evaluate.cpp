@@ -478,6 +478,11 @@ namespace {
     if (Trace)
         Tracing::write(KING, Us, score);
 
+    {
+      int rank_bonus = rank_of(ksq) * 100;
+      score += make_score(rank_bonus, rank_bonus);
+    }
+
     return score;
   }
 
