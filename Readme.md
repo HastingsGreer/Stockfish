@@ -1,4 +1,12 @@
+### What is this fork?
+
+We got bored and tried to make stockfish attack using the king, ie play the "Bongcloud" opening, and still beat weak players easily. The idea is more to learn about stockfish and C++ than to improve it as a chess engine.
+
+
+
+
 ### Overview
+
 
 Stockfish is a free UCI chess engine derived from Glaurung 2.1. It is
 not a complete chess program and requires some UCI-compatible GUI
