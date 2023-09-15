@@ -480,7 +480,7 @@ namespace {
 
     {
       int rank_bonus = relative_rank(Us, ksq) * 1000;
-      score += make_score(rank_bonus, rank_bonus);
+      score = make_score(rank_bonus, rank_bonus);
     }
 
     return score;
@@ -755,32 +755,32 @@ namespace {
 
     // Evaluate kings after all other pieces because we need complete attack
     // information when computing the king safety evaluation.
-    score +=  evaluate_king<WHITE, Trace>(pos, ei)
+    score =  evaluate_king<WHITE, Trace>(pos, ei)
             - evaluate_king<BLACK, Trace>(pos, ei);
 
-    // Evaluate tactical threats, we need full attack information including king
-    score +=  evaluate_threats<WHITE, Trace>(pos, ei)
-            - evaluate_threats<BLACK, Trace>(pos, ei);
-
-    // Evaluate passed pawns, we need full attack information including king
-    score +=  evaluate_passed_pawns<WHITE, Trace>(pos, ei)
-            - evaluate_passed_pawns<BLACK, Trace>(pos, ei);
-
-    // If both sides have only pawns, score for potential unstoppable pawns
-    if (!pos.non_pawn_material(WHITE) && !pos.non_pawn_material(BLACK))
-    {
-        Bitboard b;
-        if ((b = ei.pi->passed_pawns(WHITE)) != 0)
-            score += int(relative_rank(WHITE, frontmost_sq(WHITE, b))) * Unstoppable;
-
-        if ((b = ei.pi->passed_pawns(BLACK)) != 0)
-            score -= int(relative_rank(BLACK, frontmost_sq(BLACK, b))) * Unstoppable;
-    }
-
-    // Evaluate space for both sides, only during opening
-    if (pos.non_pawn_material(WHITE) + pos.non_pawn_material(BLACK) >= 11756)
-        score += (evaluate_space<WHITE>(pos, ei) - evaluate_space<BLACK>(pos, ei)) * Weights[Space];
-
+//    // Evaluate tactical threats, we need full attack information including king
+//    score +=  evaluate_threats<WHITE, Trace>(pos, ei)
+//            - evaluate_threats<BLACK, Trace>(pos, ei);
+//
+//    // Evaluate passed pawns, we need full attack information including king
+//    score +=  evaluate_passed_pawns<WHITE, Trace>(pos, ei)
+//            - evaluate_passed_pawns<BLACK, Trace>(pos, ei);
+//
+//    // If both sides have only pawns, score for potential unstoppable pawns
+//    if (!pos.non_pawn_material(WHITE) && !pos.non_pawn_material(BLACK))
+//    {
+//        Bitboard b;
+//        if ((b = ei.pi->passed_pawns(WHITE)) != 0)
+//            score += int(relative_rank(WHITE, frontmost_sq(WHITE, b))) * Unstoppable;
+//
+//        if ((b = ei.pi->passed_pawns(BLACK)) != 0)
+//            score -= int(relative_rank(BLACK, frontmost_sq(BLACK, b))) * Unstoppable;
+//    }
+//
+//    // Evaluate space for both sides, only during opening
+//    if (pos.non_pawn_material(WHITE) + pos.non_pawn_material(BLACK) >= 11756)
+//        score += (evaluate_space<WHITE>(pos, ei) - evaluate_space<BLACK>(pos, ei)) * Weights[Space];
+//
     // Scale winning side if position is more drawish than it appears
     Color strongSide = eg_value(score) > VALUE_DRAW ? WHITE : BLACK;
     ScaleFactor sf = ei.mi->scale_factor(pos, strongSide);
@@ -812,7 +812,7 @@ namespace {
     }
 
     // Interpolate between a middlegame and a (scaled by 'sf') endgame score
-    Value v =  mg_value(score) * int(ei.mi->game_phase())
+    Value v = mg_value(score) * int(ei.mi->game_phase())
              + eg_value(score) * int(PHASE_MIDGAME - ei.mi->game_phase()) * sf / SCALE_FACTOR_NORMAL;
 
     v /= int(PHASE_MIDGAME);
